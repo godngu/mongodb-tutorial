@@ -14,6 +14,7 @@ const BlogSchema = new Schema({
         },
     },
     // comments: [CommentSchema]
+    commentsCount: { type: Number, default: 0, required: true }
 }, { timestamps: true })
 
 // BlogSchema.virtual("comments", {

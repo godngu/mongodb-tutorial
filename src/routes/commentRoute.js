@@ -40,7 +40,10 @@ commentRouter.post('/', async (req, res) => {
         //     comment.save(),
         //     Blog.updateOne({ _id: blogId }, { $push: { comments: comment } })
         // ])
-        await comment.save();
+        await Promise.all([
+            comment.save(),
+            Blog.updateOne({ _id: blogId }, { $inc: { commentsCount: 1 } })
+        ])
         return res.send({ comment })
 
     } catch (err) {
@@ -56,7 +59,6 @@ commentRouter.get('/', async (req, res) => {
         const { blogId } = req.params;
         if (!isValidObjectId(blogId)) return res.status(400).send({ err: 'blogId is invalid' });
         
-        console.log("blogId", blogId);
         const comments = await Comment.find({ blogId: blogId })
             .sort({ createdAt: -1 })
             .skip( page * 3 )
