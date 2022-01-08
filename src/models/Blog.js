@@ -13,7 +13,7 @@ const BlogSchema = new Schema({
             last: { type: String, required: true }
         },
     },
-    comments: [CommentSchema]
+    // comments: [CommentSchema]
 }, { timestamps: true })
 
 // BlogSchema.virtual("comments", {
