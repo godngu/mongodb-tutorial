@@ -34,15 +34,21 @@ commentRouter.post('/', async (req, res) => {
             content, 
             user, 
             userFullName: `${user.name.first} ${user.name.last}`, 
-            blog 
+            blog: blogId, 
         })
         // await Promise.all([
         //     comment.save(),
         //     Blog.updateOne({ _id: blogId }, { $push: { comments: comment } })
         // ])
+        blog.commentsCount++;
+        blog.comments.push(comment);
+        if (blog.commentsCount > 3) blog.comments.shift();
+
+
         await Promise.all([
             comment.save(),
-            Blog.updateOne({ _id: blogId }, { $inc: { commentsCount: 1 } })
+            blog.save()
+            // Blog.updateOne({ _id: blogId }, { $inc: { commentsCount: 1 } })
         ])
         return res.send({ comment })
 
